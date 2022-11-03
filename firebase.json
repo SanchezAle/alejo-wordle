@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "dist/alejo-wordle",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+.keyboard--content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    background-color: #484C4F;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 7px;
+}
+
+.key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: #484C4F;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    user-select: none;
+    box-shadow:
+        3px 3px 6px #0002,
+        -1px -1px 3px #292E32;
+}
+
+.key:hover {
+    color: orangered;
+}
+
+.key:active {
+    box-shadow:
+        inset 3px 3px 6px #0002,
+        inset -3px -3px 6px #292E32;
+}
+
+.space {
+    width: 70%;
+}
+
+.backspace {
+    width: 60px;
+}

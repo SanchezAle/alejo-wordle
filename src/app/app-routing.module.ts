@@ -1,7 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [];
+import { TheGameComponent } from './core/pages/the-game/the-game.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: TheGameComponent,
+    pathMatch: 'full',
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
