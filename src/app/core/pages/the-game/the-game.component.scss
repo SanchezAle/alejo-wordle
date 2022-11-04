@@ -16,13 +16,27 @@
     bottom: 0px;
 }
 
-.repositorio a {
+.options--user {
     position: absolute;
-    right: 0px;
-    text-align: right;
+    width: 100%;
+    max-width: 1280px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.repositorio {
     color: white;
     text-decoration: none;
-    padding: 10px;
+}
+
+.instructions {
+    color: white;
+    cursor: pointer;
+}
+
+.github--icon {
+    color: white;
 }
 
 @media screen and (min-width: 600px) {

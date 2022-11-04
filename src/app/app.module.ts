@@ -9,13 +9,15 @@ import { DashboardComponent } from './core/components/dashboard/dashboard.compon
 import { KeyboardComponent } from './core/components/keyboard/keyboard.component';
 import { TheGameComponent } from './core/pages/the-game/the-game.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalWindowComponent } from './feature/modal-window/modal-window.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     KeyboardComponent,
-    TheGameComponent
+    TheGameComponent,
+    ModalWindowComponent
   ],
   imports: [
     AngularMaterialModule,
