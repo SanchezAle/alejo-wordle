@@ -1,7 +1,7 @@
 <section class="container--game">
     <div class="options--user">
         <div>
-            <i class="instructions fa-solid fa-circle-info fa-xl" (click)="openDialog()"></i>
+            <i class="instructions fa-solid fa-circle-info fa-xl" (click)="openModalWindows()"></i>
         </div>
         <a class="repositorio" href="https://github.com/SanchezAle/alejo-wordle" Target="_blank">
             <i class="github--icon fa-brands fa-github fa-xl"></i>
@@ -9,5 +9,7 @@
     </div>
     <h1 class="web-title">Alejo Wordle</h1>
     <app-dashboard class="bashboard"></app-dashboard>
-    <app-keyboard class="keyboard"></app-keyboard>
+    <div class="keyboard">
+        <app-keyboard></app-keyboard>
+    </div>
 </section>

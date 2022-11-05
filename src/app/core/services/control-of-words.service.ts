@@ -1,14 +1,41 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, tap, catchError, EMPTY } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+
+import { ModalWindowComponent } from 'src/app/feature/modal-window/modal-window.component';
+import { RandomWordService } from './random-word.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ControlOfWordsService {
 
-  constructor() {
-    console.log(this.rightWord);
+  constructor(
+    private randomWord: RandomWordService,
+    private dialog: MatDialog,
+  ) {
+    this.rightWord$.subscribe();
   }
+
+  private rightWord = '';
+
+  theGameMessage$ = new Subject<string>();
+
+  private letterPosition = 0;
+
+  private letterRow = 0;
+
+  private attempts = 1;
+
+  rightWord$ = this.randomWord.getRandomWord()
+    .pipe(
+      tap(word => this.rightWord = word),
+      catchError(() => {
+        this.rightWord = this.randomWord.getRightWord();
+        console.log(this.rightWord);
+        return EMPTY;
+      }),
+    )
 
   addLetter(key: string) {
     if(this.letterPosition > 4) return;
@@ -27,31 +54,51 @@ export class ControlOfWordsService {
   wordIsCorrect() {
     if(this.arrayLetters[this.letterRow].length < 5) return this.theGameMessage$.next('¡Te faltan letras!');
     this.validateLetterPosition(this.letterRow);
-    if(this.validateWord(this.letterRow)) return this.theGameMessage$.next('¡Haz ganado!');
+
+    if(this.validateWord(this.letterRow)) {
+      
+      const instructions = 
+        `¡Felicidades campeon! Acabas de acertar cada una de las letras correctas y has culminado el juego,
+        pulsa en el siguiente botón para volver a jugar:`
+
+      this.openModalWindows(instructions);
+      this.theGameMessage$.next('¡Haz ganado!');
+      return;
+    }
+
+    if(this.attempts == 6) {
+
+      const instructions = 
+        `Game Over.. ¡Pero no te desanimes mi amigo! aún tienes oportunidad de ganar, 
+        presiona el siguiente boton para jugar de nuevo:`
+
+      this.openModalWindows(instructions);
+      this.theGameMessage$.next('Haz perdido :(');
+      return;
+
+    }
+
     this.nextRow();
     this.theGameMessage$.next('Tienes un nuevo intento');
   }
 
-  theGameMessage$ = new Subject<string>();
-
   private validateLetterPosition(row: number) {
     const rightWordArray = Array.from(this.rightWord);
 
-    this.arrayLetters[row].findIndex((letter: any, index) => {
-      const indexRight = rightWordArray.indexOf(letter);
-
-      if(indexRight === -1) {
-        this.letterNotFound(row, index);
-        return;
-      }
-
-      if(indexRight === index) {
-        this.letterWin(row, index);
-        return;
-      }
-
-      if(indexRight !== index) this.letterFound(row, index);
+    this.arrayLetters[row].findIndex((letter: any, index: number) => {    
+      if(letter === rightWordArray[index]) return this.letterWin(row, index);
+      if(rightWordArray.includes(letter)) return this.letterFound(row, index);
+      this.letterNotFound(row, index);
     });
+  }
+
+  private openModalWindows(instructions: string): void {
+
+    const dialogRef = this.dialog.open(ModalWindowComponent, {
+      width: '400px',
+      data: instructions,
+    });
+    
   }
 
   private activeLetter(row: number, position: number) {
@@ -81,10 +128,7 @@ export class ControlOfWordsService {
   private nextRow() {
     this.letterPosition = 0;
     this.letterRow++;
-  }
-
-  private getRightWord() {
-    return this.wordsList[Math.floor(Math.random() * this.wordsList.length)];
+    this.attempts++;
   }
 
   getLetters() {
@@ -95,9 +139,23 @@ export class ControlOfWordsService {
     return this.arrayStyles;
   }
 
-  private letterPosition = 0;
+  newGame() {
+    this.letterPosition = 0;
+    this.letterRow = 0;
+    this.attempts = 1;
+    this.theGameMessage$.next('');
+    
+    this.arrayLetters.forEach(rows => rows.length = 0);
 
-  private letterRow = 0;
+    let count = 0;
+    this.arrayStyles.forEach(rows => {
+      rows.findIndex((letter, index) => this.desactiveLetter(count, index));
+      count++;     
+    });
+
+    this.rightWord$.subscribe();
+
+  }
 
   private arrayLetters: Array<String[]> = [ [],[],[],[],[],[] ];
 
@@ -109,104 +167,5 @@ export class ControlOfWordsService {
     ['letter', 'letter', 'letter', 'letter', 'letter'],
     ['letter', 'letter', 'letter', 'letter', 'letter'],
   ];
-
-  private wordsList = [
-    "ANDES",
-    "AHORA",
-    "BORRE",
-    "CAFES",
-    "CEJAS",
-    "CLAVO",
-    "CINCO",
-    "CONOS",
-    "CURSO",
-    "DEBES",
-    "DUNAS",
-    "EDITA",
-    "EMOJI",
-    "ENOJO",
-    "ERIZO",
-    "ERRAR",
-    "EUROS",
-    "EVITA",
-    "FOCOS",
-    "FOTOS",
-    "FRUTA",
-    "FELIZ",
-    "GAFAS",
-    "GALAS",
-    "GIROS",
-    "GOLES",
-    "HABLA",
-    "HAGAN",
-    "HEMOS",
-    "HECHO",
-    "HILOS",
-    "HOJAS",
-    "IDEAS",
-    "ISLAS",
-    "JERGA",
-    "JOYAS",
-    "JUGOS",
-    "KOALA",
-    "LATAS",
-    "LAGOS",
-    "LIMON",
-    "LEGOS",
-    "LEYES",
-    "LIBRO",
-    "LOROS",
-    "LUCES",
-    "LUNAS",
-    "MARES",
-    "MARCE",
-    "METAS",
-    "MILES",
-    "MISMA",
-    "MODOS",
-    "MORRO",
-    "MONOS",
-    "MUEVE",
-    "MULTA",
-    "NABOS",
-    "NUDOS",
-    "NULOS",
-    "OBRAS",
-    "OLLAS",
-    "ORDEN",
-    "ONDAS",
-    "PARES",
-    "PALMA",
-    "PESOS",
-    "PACES",
-    "PECES",
-    "PALTA",
-    "POCOS",
-    "POCAS",
-    "PRADO",
-    "QUISE",
-    "RATOS",
-    "REDES",
-    "REJAS",
-    "RESTO",
-    "REYES",
-    "SABIA",
-    "SALTA",
-    "SERES",
-    "SUELO",
-    "TACOS",
-    "TUBOS",
-    "UNTES",
-    "VALSA",
-    "VASOS",
-    "VELAS",
-    "VOTOS",
-    "WIKIS",
-    "YOGUR",
-    "YENES",
-    "ZORRO"
-  ];
-
-  private rightWord = this.getRightWord();
 
 }

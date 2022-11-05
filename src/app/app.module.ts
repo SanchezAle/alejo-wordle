@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AngularMaterialModule } from './shared/angular-material/angular-material.module';
 
@@ -20,8 +21,9 @@ import { ModalWindowComponent } from './feature/modal-window/modal-window.compon
     ModalWindowComponent
   ],
   imports: [
-    AngularMaterialModule,
     BrowserModule,
+    HttpClientModule,
+    AngularMaterialModule,
     AppRoutingModule,
     BrowserAnimationsModule
   ],

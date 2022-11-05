@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
         const pressedKey: string = event.key.toUpperCase();
         if(pressedKey.match(/[a-z]/i) && pressedKey.length == 1) return this.wordsService.addLetter(pressedKey);
         if(pressedKey == 'BACKSPACE') return this.wordsService.removeLetter();
-        if(pressedKey == 'ENTER') this.wordsService.wordIsCorrect();
+        if(pressedKey == 'ENTER') this.wordsService.wordIsCorrect();        
       })
     )
     .subscribe();
